@@ -1,0 +1,49 @@
+{
+  "name": "jigsaw-router",
+  "version": "0.0.1-dev1",
+  "description": "jigsaw-router is a router component of jigsaw-rpc",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "test": "mocha",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test-cov": "nyc --reporter=lcov npm test",
+    "dev": "nodemon --watch ./src/ --watch ./examples/ -e ts --exec \"ts-node ./examples/test-app.ts\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jigsaw-rpc/jigsaw-router.git"
+  },
+  "keywords": [
+    "router",
+    "jigsaw"
+  ],
+  "author": "zhymc",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/jigsaw-rpc/jigsaw-router/issues"
+  },
+  "homepage": "https://github.com/jigsaw-rpc/jigsaw-router#readme",
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.14.9",
+    "cz-conventional-changelog": "^3.3.0",
+    "mocha": "^8.2.0",
+    "nyc": "^15.1.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "debug": "^4.2.0",
+    "jigsaw-rpc": "0.0.6-dev10",
+    "route-parser": "0.0.5",
+    "tiny-typed-emitter": "^2.0.3"
+  }
+}
