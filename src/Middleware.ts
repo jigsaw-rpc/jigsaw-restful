@@ -1,6 +1,6 @@
-import {RPC} from "jigsaw-rpc"
 import Router from "./Router";
 import Path from "./Path";
+import assert from "assert";
 
 type NextFunction = ()=>Promise<void>;
 type HandlerFunction = (ctx:any,Next:NextFunction)=>Promise<void>;
@@ -8,7 +8,7 @@ type HandlerFunction = (ctx:any,Next:NextFunction)=>Promise<void>;
 class Middleware{
     private routers : Array<Router> = [];
     
-    public async router(){
+    public router(){
         return this.handle.bind(this);
     }
     public get(pattern:string,handler:HandlerFunction){
@@ -28,11 +28,13 @@ class Middleware{
         this.routers.push(router);
     }
     private async handle(ctx:any,next:NextFunction) : Promise<void>{
+        assert(typeof(ctx.method)=="string","method must be specified");
+
         for(let router of this.routers){
             let path = Path.parse(ctx.method);
-
+            
             if(router.getVerb() == path.verb){
-                await router.route(ctx,next);
+                await router.route(ctx,next).catch((err)=>{});
             }
         }
     }

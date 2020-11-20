@@ -8,7 +8,7 @@ class Path{
         this.url = url;
     }
     static parse(path:string){
-        assert(path.startsWith("<"));
+        assert(path.startsWith("<"),"verb format is not correct");
         let right_char = path.indexOf(">");
         let verb = path.substring(1,right_char);
         let url = path.substring(right_char+1,path.length);
