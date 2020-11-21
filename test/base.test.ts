@@ -1,0 +1,62 @@
+const { Router } = require("../src");
+
+describe("Base Tests",function(){
+    it("should be routing correctly 1",(done)=>{
+        let router = new Router();
+        let count = 0;
+        router.get("/test/res",async (ctx:any,next:any)=>{
+            if(count==0)
+               if(++count==4)done();
+            await next();
+        });
+        router.post("/test/res",async (ctx:any,next:any)=>{
+            if(count==1)
+                if(++count==4)done();
+            await next();
+        });
+        router.delete("/test/res",async (ctx:any,next:any)=>{
+            if(count==2)
+            if(++count==4)done();
+            await next();
+        });
+        router.put("/test/res",async (ctx:any,next:any)=>{
+            if(count==3)
+            if(++count==4)done();
+            await next();
+        });
+        router.router()({
+            method:"<get>/v1/test/res"
+        },async()=>{
+
+        });
+        router.router()({
+            method:"<post>/v1/test/res"
+        },async()=>{
+
+        });
+        router.router()({
+            method:"<delete>/v1/test/res"
+        },async()=>{
+
+        });
+        router.router()({
+            method:"<put>/v1/test/res"
+        },async()=>{
+
+        });
+    });
+    it("should be routing correctly 2",(done)=>{
+        let router = new Router();
+        router.get("/test/res",async (ctx:any,next:any)=>{
+            if(ctx.resid=="a-b-c")
+                done();
+        });
+
+        router.router()({
+            method:"<get>/v1/test/res/{a-b-c}"
+        },async()=>{
+            
+        });
+    });
+    
+})

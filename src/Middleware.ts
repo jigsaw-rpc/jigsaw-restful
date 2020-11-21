@@ -34,7 +34,7 @@ class Middleware{
             let path = Path.parse(ctx.method);
             
             if(router.getVerb() == path.verb){
-                await router.route(ctx,next).catch((err)=>{});
+                await router.route(ctx,next);
             }
         }
     }

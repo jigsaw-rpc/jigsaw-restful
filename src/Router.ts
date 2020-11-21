@@ -20,14 +20,18 @@ class Router{
         return this.verb;
     }
     async route(ctx:any,next:NextFunction) : Promise<void>{
-        let path = Path.parse(ctx.method);
-        let parsed = this.parser.parse(path.url);
-
-        assert(parsed.method == this.pattern,"can't not route to.");
-
-        ctx.url = parsed.method;
-        ctx.apiver = parsed.ver;
-        ctx.resid = parsed.id;
+        try{
+            let path = Path.parse(ctx.method);
+            let parsed = this.parser.parse(path.url);
+    
+            assert(parsed.method == this.pattern,"can't not route to.");
+    
+            ctx.url = parsed.method;
+            ctx.apiver = parsed.ver;
+            ctx.resid = parsed.id;    
+        }catch(err){
+            return;
+        }
 
 
         await this.handler(ctx,next);

@@ -4,12 +4,13 @@ import Querystring from "querystring";
 class URLParser{
     private parsers : Array<UrlPattern> = [];
     constructor(url:string){
-        this.parsers.push(new UrlPattern(/^\/v([0-9]{1,})((\/[a-zA-Z]+){1,})\/{0,1}([0-9]*)$/,["ver","method","_","id"]));
+        this.parsers.push(new UrlPattern(/^\/v([0-9]{1,})((\/[a-zA-Z0-9]+){1,})\/{0,1}(\{([A-Za-z0-9\-]+)\}){0,1}$/,["ver","method","_","_","id"]));
         
     }
     private match(url:string){
         for(let parser of this.parsers){
             let parsed = parser.match(url);
+            
             if(parsed == null)
                 continue;
             else
@@ -25,10 +26,9 @@ class URLParser{
         if(parsed == null)
             throw new Error("this url is not correct format");
 
-        if(parsed.id.length == 0)
-            parsed.id = 0;
+        if(!parsed.id)
+            parsed.id = "";
 
-        parsed.id = parseInt(parsed.id);
         parsed.ver = parseInt(parsed.ver);
         
         return parsed;
