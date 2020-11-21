@@ -2,25 +2,34 @@ import UrlPattern from "url-pattern";
 import Querystring from "querystring";
 
 class URLParser{
-    private parser : UrlPattern;
+    private parsers : Array<UrlPattern> = [];
     constructor(url:string){
-        this.parser = new UrlPattern(/\/v([0-9]{1,})(\/[a-zA-Z\/]*)\/([0-9]*)\?{0,1}(.*)/,["ver","method","id","rawquery"]);
+        this.parsers.push(new UrlPattern(/^\/v([0-9]{1,})((\/[a-zA-Z]+){1,})\/{0,1}([0-9]*)$/,["ver","method","_","id"]));
+        
+    }
+    private match(url:string){
+        for(let parser of this.parsers){
+            let parsed = parser.match(url);
+            if(parsed == null)
+                continue;
+            else
+                return parsed;
+        }
 
+        throw new Error("not matched url patterns");
     }
     parse(url:string){
-        let parsed = this.parser.match(url);
+        
+        let parsed = this.match(url);
 
         if(parsed == null)
             throw new Error("this url is not correct format");
-        let query = Querystring.parse(parsed.rawquery);
-        
+
         if(parsed.id.length == 0)
             parsed.id = 0;
 
         parsed.id = parseInt(parsed.id);
-
         parsed.ver = parseInt(parsed.ver);
-        parsed.query = query;
         
         return parsed;
     }

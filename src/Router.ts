@@ -26,10 +26,9 @@ class Router{
         assert(parsed.method == this.pattern,"can't not route to.");
 
         ctx.url = parsed.method;
-        ctx.query = parsed.query;
         ctx.apiver = parsed.ver;
         ctx.resid = parsed.id;
-        ctx.query = parsed.query;
+
 
         await this.handler(ctx,next);
     }
