@@ -57,6 +57,30 @@ describe("Base Tests",function(){
         },async()=>{
             
         });
+
     });
+    it("should throw error when router middleware throw error inner",async ()=>{
+        let router = new Router();
+        router.get("/test/res",async (ctx:any,next:any)=>{
+            throw new Error();
+        });
+        
+        let hasError = false;
+
+        try{
+            await router.router()({
+                method:"<get>/v1/test/res/{a-b-c}"
+            },async()=>{
+                
+            });    
+        }catch(err){
+            hasError = true; 
+        }  
+
+        if(!hasError){
+            throw new Error("should throw error")
+        }
+        
+    })
     
 })
