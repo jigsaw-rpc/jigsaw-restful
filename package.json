@@ -1,7 +1,7 @@
 {
-  "name": "jigsaw-router",
+  "name": "jigsaw-restful",
   "version": "0.0.1-dev2",
-  "description": "jigsaw-router is a router component of jigsaw-rpc",
+  "description": "jigsaw-restful is a router component of jigsaw-rpc",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -41,8 +41,12 @@
     }
   },
   "dependencies": {
+    "@types/koa": "^2.11.6",
     "debug": "^4.2.0",
-    "jigsaw-rpc": "0.0.6-dev10",
+    "jigsaw-rpc": "0.0.7-dev4",
+    "koa": "^2.13.0",
+    "koa-compose": "^4.1.0",
+    "koa-useragent": "^4.0.0",
     "route-parser": "0.0.5",
     "tiny-typed-emitter": "^2.0.3",
     "url-pattern": "^1.0.3"

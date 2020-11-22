@@ -1,6 +1,7 @@
 import URLParser from "./URLParser";
 import assert from "assert";
 import Path from "./Path";
+import { parse } from "path";
 
 type NextFunction = ()=>Promise<void>;
 type HandlerFunction = (ctx:any,Next:NextFunction)=>Promise<void>;
@@ -19,20 +20,21 @@ class Router{
     getVerb(){
         return this.verb;
     }
-    async route(ctx:any,next:NextFunction) : Promise<void>{
+    match(path_str:string){
         try{
-            let path = Path.parse(ctx.method);
+            let path = Path.parse(path_str);
             let parsed = this.parser.parse(path.url);
     
             assert(parsed.method == this.pattern,"can't not route to.");
-    
-            ctx.url = parsed.method;
-            ctx.apiver = parsed.ver;
-            ctx.resid = parsed.id;    
+            return parsed;
         }catch(err){
-            return;
+            return false;
         }
-
+    }
+    async route(matched:any,ctx:any,next:NextFunction) : Promise<void>{
+        ctx.url = matched.method;
+        ctx.apiver = matched.ver;
+        ctx.resid = matched.id;    
 
         await this.handler(ctx,next);
     }
