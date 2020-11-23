@@ -4,22 +4,30 @@ describe("Base Tests",function(){
     it("should be routing correctly 1",(done)=>{
         let router = new Router();
         let count = 0;
-        router.get("/test/res",async (ctx:any,next:any)=>{
+        router.get("/v1/test/res",{
+            vali:{}
+        },async (ctx:any,next:any)=>{
             if(count==0)
                if(++count==4)done();
             await next();
         });
-        router.post("/test/res",async (ctx:any,next:any)=>{
+        router.post("/v1/test/res",{
+            vali:{}
+        },async (ctx:any,next:any)=>{
             if(count==1)
                 if(++count==4)done();
             await next();
         });
-        router.delete("/test/res",async (ctx:any,next:any)=>{
+        router.delete("/v1/test/res",{
+            vali:{}
+        },async (ctx:any,next:any)=>{
             if(count==2)
             if(++count==4)done();
             await next();
         });
-        router.put("/test/res",async (ctx:any,next:any)=>{
+        router.put("/v1/test/res",{
+            vali:{}
+        },async (ctx:any,next:any)=>{
             if(count==3)
             if(++count==4)done();
             await next();
@@ -47,13 +55,15 @@ describe("Base Tests",function(){
     });
     it("should be routing correctly 2",(done)=>{
         let router = new Router();
-        router.get("/test/res",async (ctx:any,next:any)=>{
+        router.get("/v1/test/res",{
+            vali:{}
+        },async (ctx:any,next:any)=>{
             if(ctx.resid=="a-b-c")
                 done();
         });
 
         router.router()({
-            method:"<get>/v1/test/res/{a-b-c}"
+            method:"<get>/v1/test/res/[a-b-c]"
         },async()=>{
             
         });
@@ -61,7 +71,9 @@ describe("Base Tests",function(){
     });
     it("should throw error when router middleware throw error inner",async ()=>{
         let router = new Router();
-        router.get("/test/res",async (ctx:any,next:any)=>{
+        router.get("/v1/test/res",{
+            vali:{}
+        },async (ctx:any,next:any)=>{
             throw new Error();
         });
         
