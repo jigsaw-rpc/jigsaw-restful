@@ -5,16 +5,19 @@ import InternalError from "./InternalError";
 class APIError extends RPCSpi.error.JGError{
     private apicode : number;
     private httpcode: number;
-    constructor(code:number,message:string,httpcode : number = 500){
+    private detail : any;
+
+    constructor(code:number,message:string,httpcode : number = 500,detail:any=""){
         super(-1,"");
 
         this.name = "APIError";
         this.apicode = code;
         this.httpcode = httpcode;
         this.message = message;
+        this.detail = detail;
     }
     getDetailMessage(){
-        return "";
+        return this.detail;
     }
     getHttpStatusCode(){
         return this.httpcode;
@@ -27,6 +30,7 @@ class APIError extends RPCSpi.error.JGError{
             name:"APIError",
             code:-1,
             desc:"",
+            detail:this.detail,
             apicode:this.apicode,
             httpcode:this.httpcode,
             message:this.message
@@ -36,7 +40,7 @@ class APIError extends RPCSpi.error.JGError{
     static parse(str:string){
         let obj=JSON.parse(str);
 
-        return new APIError(obj.apicode,obj.message,obj.httpcode);
+        return new APIError(obj.apicode,obj.message,obj.httpcode,obj.detail);
     }
     static fromError(err:Error){
         return new APIError(9001,err.message,500);

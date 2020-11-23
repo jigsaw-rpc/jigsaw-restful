@@ -4,7 +4,7 @@ import Querystring from "querystring";
 class URLParser{
     private parsers : Array<UrlPattern> = [];
     constructor(url:string){
-        this.parsers.push(new UrlPattern(/^\/v([0-9]{1,})((\/[a-zA-Z0-9]+){1,})\/{0,1}(\{([A-Za-z0-9\-]+)\}){0,1}$/,["ver","method","_","_","id"]));
+        this.parsers.push(new UrlPattern(/^(\/v([0-9]{1,})(\/[a-zA-Z0-9]+){1,})\/{0,1}(\[([A-Za-z0-9\-]+)\]){0,1}$/,["method","ver","_","_","id"]));
         
     }
     private match(url:string){

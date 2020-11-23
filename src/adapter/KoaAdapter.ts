@@ -32,6 +32,7 @@ class KoaAdapter{
     private async handle(ctx:koa.Context,next:koa.Next){
         await next();
 
+        
         let req_path = ``;
 
         req_path += `${ctx.query.path}`;
@@ -41,6 +42,9 @@ class KoaAdapter{
         
         let body_obj:any = null;
         try{
+            
+
+
             if(!ctx.query.path)
                 throw new RequestFormatError(`path param must be specified on URL`);
 
