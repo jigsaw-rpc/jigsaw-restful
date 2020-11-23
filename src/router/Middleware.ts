@@ -35,21 +35,26 @@ class Middleware{
     private async handle(ctx:any,next:NextFunction) : Promise<void>{
         
         assert(typeof(ctx.method)=="string","method must be specified");
-        let everMatched = false;
+        let UrlEverMatched = new Map<string,boolean>();
+        let path = Path.parse(ctx.method);
 
         for(let router of this.routers){
-            let path = Path.parse(ctx.method);
             let matched = router.match(ctx.method);
             if(matched){
-                everMatched = true;
+                if(!UrlEverMatched.has(path.url))
+                    UrlEverMatched.set(path.url,false);
 
-                if(router.getVerb() == path.verb)
+                if(router.getVerb() == path.verb){
+                    UrlEverMatched.set(path.url,true);
                     await router.route(matched,ctx,next);
-                else
-                    throw new VerbNotImplError(path.verb);
+                }
+                    
             }
         }
-        if(this.strict && !everMatched)
+        if(UrlEverMatched.has(path.url) && UrlEverMatched.get(path.url) == false)
+            throw new VerbNotImplError(path.verb);
+
+        if(this.strict && !UrlEverMatched.has(path.url))
             throw new APINotFoundError();
     }
 }
