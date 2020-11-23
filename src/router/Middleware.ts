@@ -1,6 +1,6 @@
 import Router from "./Router";
 import Path from "./Path";
-import assert, { strict } from "assert";
+import assert from "assert";
 import VerbNotImplError from "../apierror/VerbNotImplError";
 import APINotFoundError from "../apierror/APINotFoundError";
 

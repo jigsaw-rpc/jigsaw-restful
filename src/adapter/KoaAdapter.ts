@@ -3,16 +3,21 @@ import {RPCSpi} from "jigsaw-rpc";
 import koa from "koa"
 import APIError from "../apierror/APIError";
 import HTTPResponse from "./HTTPResponse";
-import JigsawInvoker from "./JigsawInvoker";
+import PostHandler from "../PostHandler";
 import compose from "koa-compose";
 import {userAgent} from "koa-useragent";
+import {RPC} from "jigsaw-rpc";
 
 class KoaAdapter{
-    private invoker:JigsawInvoker;
-    constructor(jigsaw:RPCSpi.jigsaw.IJigsaw){
-        this.invoker = new JigsawInvoker(jigsaw);
+    private jigsaw:RPCSpi.jigsaw.IJigsaw;
+    constructor(){
+        this.jigsaw = RPC.GetJigsaw();
+        this.jigsaw.post(PostHandler);
     }
-    get():koa.Middleware{
+    getJigsaw(){
+        return this.jigsaw;
+    }
+    koa():koa.Middleware{
         let middleware = this.handle.bind(this);
         return compose([userAgent,middleware]);
     }
@@ -29,7 +34,7 @@ class KoaAdapter{
         
         let body_obj:any = null;
         try{
-            let data = await this.invoker.invoke(req_path,query);
+            let data = await this.jigsaw.send(req_path,query);
             ctx.status = 200;
             body_obj = HTTPResponse.createSuccess(data).toObject();
             

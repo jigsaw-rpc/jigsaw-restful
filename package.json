@@ -1,6 +1,6 @@
 {
   "name": "jigsaw-restful",
-  "version": "0.0.1-dev2",
+  "version": "0.0.1-dev3",
   "description": "jigsaw-restful is a router component of jigsaw-rpc",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jigsaw-rpc/jigsaw-router.git"
+    "url": "git+https://github.com/jigsaw-rpc/jigsaw-restful.git"
   },
   "keywords": [
     "router",
@@ -22,9 +22,9 @@
   "author": "zhymc",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/jigsaw-rpc/jigsaw-router/issues"
+    "url": "https://github.com/jigsaw-rpc/jigsaw-restful/issues"
   },
-  "homepage": "https://github.com/jigsaw-rpc/jigsaw-router#readme",
+  "homepage": "https://github.com/jigsaw-rpc/jigsaw-restful#readme",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/mocha": "^8.0.3",
@@ -43,7 +43,7 @@
   "dependencies": {
     "@types/koa": "^2.11.6",
     "debug": "^4.2.0",
-    "jigsaw-rpc": "0.0.7-dev4",
+    "jigsaw-rpc": "0.0.7-dev5",
     "koa": "^2.13.0",
     "koa-compose": "^4.1.0",
     "koa-useragent": "^4.0.0",

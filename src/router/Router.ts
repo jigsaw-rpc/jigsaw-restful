@@ -1,7 +1,6 @@
 import URLParser from "./URLParser";
 import assert from "assert";
 import Path from "./Path";
-import { parse } from "path";
 
 type NextFunction = ()=>Promise<void>;
 type HandlerFunction = (ctx:any,Next:NextFunction)=>Promise<void>;
@@ -38,5 +37,6 @@ class Router{
 
         await this.handler(ctx,next);
     }
+
 }
 export default Router;
