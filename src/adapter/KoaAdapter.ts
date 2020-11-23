@@ -1,10 +1,12 @@
 import {RPCSpi} from "jigsaw-rpc";
 
 import koa from "koa"
+import RequestFormatError from "../apierror/RequestFormatError";
 import APIError from "../apierror/APIError";
 import HTTPResponse from "./HTTPResponse";
 import PostHandler from "../PostHandler";
 import compose from "koa-compose";
+import bodyparser from "koa-bodyparser";
 import {userAgent} from "koa-useragent";
 import {RPC} from "jigsaw-rpc";
 
@@ -19,22 +21,34 @@ class KoaAdapter{
     }
     koa():koa.Middleware{
         let middleware = this.handle.bind(this);
-        return compose([userAgent,middleware]);
+        return compose([bodyparser({
+            onerror(){
+
+            }
+
+        }),userAgent,middleware]);
     }
 
     private async handle(ctx:koa.Context,next:koa.Next){
-        let req_path = ``;
-        let query = ctx.query;
+        await next();
 
-        req_path += `${query.path}`;
+        let req_path = ``;
+
+        req_path += `${ctx.query.path}`;
         req_path += `:`;
         req_path += `<${ctx.method.toLowerCase()}>`;
         req_path += `${ctx.path}`;
-        delete query.path;
         
         let body_obj:any = null;
         try{
-            let data = await this.jigsaw.send(req_path,query);
+            if(!ctx.query.path)
+                throw new RequestFormatError(`path param must be specified on URL`);
+
+            if(!ctx.is("json") || !ctx.request.body)
+                throw new RequestFormatError(`request body must be a json`);
+
+            
+            let data = await this.jigsaw.send(req_path,ctx.request.body);
             ctx.status = 200;
             body_obj = HTTPResponse.createSuccess(data).toObject();
             
@@ -52,7 +66,6 @@ class KoaAdapter{
         else
             ctx.body = JSON.stringify(body_obj,null,"\t");
 
-        await next();
     }
 
 };
