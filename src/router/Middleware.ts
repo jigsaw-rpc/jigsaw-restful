@@ -7,7 +7,7 @@ import RouterOption from "./RouterOption";
 import RequestFormatError from "../apierror/RequestFormatError";
 
 type NextFunction = ()=>Promise<void>;
-type HandlerFunction = (ctx:any,Next:NextFunction)=>Promise<void>;
+type HandlerFunction = (ctx:any,next:NextFunction)=>Promise<void>;
 
 class Middleware{
     private routers : Array<Router> = [];
@@ -16,6 +16,14 @@ class Middleware{
         this.strict = strict;
     }
     public getAPIMap(){
+        const getPrototype = (obj:any,name:string,def:any = {})=>{
+            if(!obj[name])
+                obj[name] = def;
+            else
+                def = obj[name];
+            return def;
+        }
+        
         let apimap : any = {};
         for(let router of this.routers){
             let option =router.getOption();
@@ -23,9 +31,19 @@ class Middleware{
                 continue;
 
             let resurl = router.getPattern();
-            if(!apimap[resurl])
-                apimap[resurl] = [];
-            apimap[resurl].push(option);
+            let verb = router.getVerb();
+
+            let mapobj :any = getPrototype(apimap,resurl);            
+            getPrototype(mapobj,"desc",option.desc || "");
+            getPrototype(mapobj,"return",option.return || "any");
+            
+            let verbs = getPrototype(mapobj,"method",{});
+            
+            let paramobj :any = getPrototype(verbs,verb);
+
+                
+            for(let i in option.vali)
+                getPrototype(paramobj,i,option.vali[i]);            
         };
 
         return apimap;
