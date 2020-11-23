@@ -60,7 +60,8 @@ class KoaAdapter{
             body_obj = HTTPResponse.createSuccess(data).toObject();
             
         }catch(err){//must be APIError
-            
+//            console.log(err);
+
             if(!(err instanceof APIError))
                 err = APIError.fromError(err);
 

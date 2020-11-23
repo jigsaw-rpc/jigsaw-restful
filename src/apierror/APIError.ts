@@ -33,8 +33,10 @@ class APIError extends RPCSpi.error.JGError{
             detail:this.detail,
             apicode:this.apicode,
             httpcode:this.httpcode,
-            message:this.message
+            message:this.message,
+            parsing_str:""
         }
+        obj.parsing_str = JSON.stringify(obj);
         return JSON.stringify(obj);
     }
     static parse(str:string){
@@ -46,7 +48,7 @@ class APIError extends RPCSpi.error.JGError{
         return new APIError(9001,err.message,500);
     }
     static fromJGError(err:RPCSpi.error.JGError){    
-        return APIError.parse(err.parsing_str);
+        return APIError.parse(err.parsing_str || "{}");
     }
 }
 
