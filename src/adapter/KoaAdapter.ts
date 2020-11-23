@@ -22,7 +22,7 @@ class KoaAdapter{
     koa():koa.Middleware{
         let middleware = this.handle.bind(this);
         return compose([bodyparser({
-            onerror(){
+            onerror(err,ctx){
 
             }
 
@@ -43,16 +43,19 @@ class KoaAdapter{
         let body_obj:any = null;
         try{
             
-
-
             if(!ctx.query.path)
                 throw new RequestFormatError(`path param must be specified on URL`);
-
-            if(!ctx.is("json") || !ctx.request.body)
-                throw new RequestFormatError(`request body must be a json`);
+            
+            let invoke_data = ctx.request.body;
+            if(ctx.get("Content-Type") == "" && !ctx.request.rawBody){
+                invoke_data = {};
+            }else{
+                if(!ctx.is("json") || !ctx.request.body)
+                    throw new RequestFormatError(`request body must be a json`);
+            }
 
             
-            let data = await this.jigsaw.send(req_path,ctx.request.body);
+            let data = await this.jigsaw.send(req_path,invoke_data);
             ctx.status = 200;
             body_obj = HTTPResponse.createSuccess(data).toObject();
             
