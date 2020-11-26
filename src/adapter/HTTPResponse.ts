@@ -6,6 +6,7 @@ class HTTPResponse{
     private message:string;
     private detail:string;
     private data:any;
+    private type:string;
 
     constructor(code:number,httpcode:number,message:string,detail:string="",data:any = null){
         this.code = code;
@@ -13,6 +14,7 @@ class HTTPResponse{
         this.message = message;
         this.detail = detail
         this.data = data;
+        this.type = this.data instanceof Buffer ? "base64" : "object";
     }
     toObject(){
         return {
@@ -21,7 +23,8 @@ class HTTPResponse{
             httpcode:this.httpcode,
             message:this.message,
             detail:this.detail,
-            data:this.data
+            type:this.type,
+            data:this.type == "base64" ? this.data.toString("base64") : this.data
         }
     }
     static createSuccess(data:any){
