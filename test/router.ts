@@ -1,10 +1,13 @@
-const { Router } = require("../src");
+import { Router } from "../src";
 
 describe("Base Tests",function(){
     it("should be routing correctly 1",(done)=>{
         let router = new Router();
         let count = 0;
         router.get("/v1/test/res",{
+            public:true,
+            desc:"",
+            return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
             if(count==0)
@@ -12,6 +15,9 @@ describe("Base Tests",function(){
             await next();
         });
         router.post("/v1/test/res",{
+            public:true,
+            desc:"",
+            return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
             if(count==1)
@@ -19,6 +25,9 @@ describe("Base Tests",function(){
             await next();
         });
         router.delete("/v1/test/res",{
+            public:true,
+            desc:"",
+            return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
             if(count==2)
@@ -26,6 +35,9 @@ describe("Base Tests",function(){
             await next();
         });
         router.put("/v1/test/res",{
+            public:true,
+            desc:"",
+            return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
             if(count==3)
@@ -56,8 +68,11 @@ describe("Base Tests",function(){
     it("should be routing correctly 2",(done)=>{
         let router = new Router();
         router.get("/v1/test/res",{
+            public:true,
+            desc:"",
+            return:"",
             vali:{}
-        },async (ctx:any,next:any)=>{
+        },async (ctx,next)=>{
             if(ctx.resid=="a-b-c")
                 done();
         });
@@ -72,6 +87,9 @@ describe("Base Tests",function(){
     it("should throw error when router middleware throw error inner",async ()=>{
         let router = new Router();
         router.get("/v1/test/res",{
+            public:true,
+            desc:"",
+            return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
             throw new Error();

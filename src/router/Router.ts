@@ -45,7 +45,7 @@ class Router{
         ctx.url = matched.method;
         ctx.apiver = matched.ver;
         ctx.resid = matched.id;
-
+        
         let validator = new Validator(ctx.data,this.option.vali);
 
         if(validator.fails())

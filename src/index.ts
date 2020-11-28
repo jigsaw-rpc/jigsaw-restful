@@ -1,3 +1,5 @@
+///<reference path='jigsaw.d.ts' />
+
 import KoaAdapter from "./adapter/KoaAdapter";
 import Middleware from "./router/Middleware";
 import PostHandler from "./PostHandler";
