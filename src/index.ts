@@ -1,4 +1,4 @@
-///<reference path='jigsaw.d.ts' />
+///<reference path='./jigsaw.ts' />
 
 import KoaAdapter from "./adapter/KoaAdapter";
 import Middleware from "./router/Middleware";
