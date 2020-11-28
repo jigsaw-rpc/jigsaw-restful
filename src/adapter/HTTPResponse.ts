@@ -1,4 +1,4 @@
-import APIError from "src/apierror/APIError";
+import APIError from "../apierror/APIError";
 
 class HTTPResponse{
     private code:number;

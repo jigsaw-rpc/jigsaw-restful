@@ -5,9 +5,7 @@ import VerbNotImplError from "../apierror/VerbNotImplError";
 import APINotFoundError from "../apierror/APINotFoundError";
 import RouterOption from "./RouterOption";
 import RequestFormatError from "../apierror/RequestFormatError";
-
-type NextFunction = ()=>Promise<void>;
-type HandlerFunction = (ctx:any,next:NextFunction)=>Promise<void>;
+import { RPCSpi } from "jigsaw-rpc";
 
 class Middleware{
     private routers : Array<Router> = [];
@@ -51,23 +49,23 @@ class Middleware{
     public router(){
         return this.handle.bind(this);
     }
-    public get(pattern:string,option:RouterOption,handler:HandlerFunction){
+    public get(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         return this.addRouter("get",pattern,option,handler);
     }
-    public post(pattern:string,option:RouterOption,handler:HandlerFunction){
+    public post(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         return this.addRouter("post",pattern,option,handler);
     }
-    public put(pattern:string,option:RouterOption,handler:HandlerFunction){
+    public put(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         return this.addRouter("put",pattern,option,handler);
     }
-    public delete(pattern:string,option:RouterOption,handler:HandlerFunction){
+    public delete(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         return this.addRouter("delete",pattern,option,handler);
     }
-    private addRouter(verb:string,pattern:string,option:RouterOption,handler:HandlerFunction){
+    private addRouter(verb:string,pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         let router = new Router(verb,pattern,option,handler);
         this.routers.push(router);
     }
-    private async handle(ctx:any,next:NextFunction) : Promise<void>{
+    private async handle(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
         
         assert(typeof(ctx.method)=="string","method must be specified");
 

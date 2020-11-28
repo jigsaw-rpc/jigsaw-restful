@@ -1,5 +1,4 @@
 import UrlPattern from "url-pattern";
-import Querystring from "querystring";
 
 class URLParser{
     private parsers : Array<UrlPattern> = [];

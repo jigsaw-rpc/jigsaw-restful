@@ -4,21 +4,17 @@ import Path from "./Path";
 import RouterOption from "./RouterOption";
 import Validator from "validatorjs";
 import RequestFormatError from "../apierror/RequestFormatError";
-
-
-type NextFunction = ()=>Promise<void>;
-type HandlerFunction = (ctx:any,Next:NextFunction)=>Promise<void>;
-
-
+import { RPCSpi } from "jigsaw-rpc";
+import MatchInfo from "./MatchInfo";
 
 class Router{
     private verb:string;
     private pattern:string;
-    private parser : any;
-    private handler : HandlerFunction;
+    private parser : URLParser;
+    private handler : RPCSpi.jigsaw.ware.UseWare;
     private option : RouterOption;
 
-    constructor(verb:string,pattern:string,option:RouterOption,handler:HandlerFunction){
+    constructor(verb:string,pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         this.verb = verb;
         this.pattern = pattern;
         this.handler = handler;
@@ -45,18 +41,15 @@ class Router{
             return false;
         }
     }
-    async route(matched:any,ctx:any,next:NextFunction) : Promise<void>{
+    async route(matched:MatchInfo,ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
         ctx.url = matched.method;
         ctx.apiver = matched.ver;
         ctx.resid = matched.id;
-        
 
         let validator = new Validator(ctx.data,this.option.vali);
 
         if(validator.fails())
             throw new RequestFormatError(validator.errors.errors);
-        
-        
 
         await this.handler(ctx,next);
     }
