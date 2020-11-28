@@ -1,6 +1,6 @@
 {
   "name": "jigsaw-restful",
-  "version": "0.0.1-dev17",
+  "version": "0.0.1-dev18",
   "description": "jigs aw-restful is a router component of jigsaw-rpc",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

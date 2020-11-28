@@ -46,22 +46,22 @@ describe("Base Tests",function(){
         });
         router.router()({
             method:"<get>/v1/test/res"
-        },async()=>{
+        } as any,async()=>{
 
         });
         router.router()({
             method:"<post>/v1/test/res"
-        },async()=>{
+        } as any,async()=>{
 
         });
         router.router()({
             method:"<delete>/v1/test/res"
-        },async()=>{
+        } as any,async()=>{
 
         });
         router.router()({
             method:"<put>/v1/test/res"
-        },async()=>{
+        } as any,async()=>{
 
         });
     });
@@ -79,7 +79,7 @@ describe("Base Tests",function(){
 
         router.router()({
             method:"<get>/v1/test/res/[a-b-c]"
-        },async()=>{
+        } as any,async()=>{
             
         });
 
@@ -100,7 +100,7 @@ describe("Base Tests",function(){
         try{
             await router.router()({
                 method:"<get>/v1/test/res/{a-b-c}"
-            },async()=>{
+            } as any,async()=>{
                 
             });    
         }catch(err){
