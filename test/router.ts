@@ -1,4 +1,4 @@
-import { Router } from "../src";
+import { Router,KoaAdapter } from "../src";
 
 describe("Base Tests",function(){
     it("should be routing correctly 1",(done)=>{
@@ -111,6 +111,11 @@ describe("Base Tests",function(){
             throw new Error("should throw error")
         }
         
+    });
+    it("KoaAdpater should be closable",async()=>{
+        let adapter = new KoaAdapter();
+        await new Promise((resolve)=>adapter.getJigsaw().on("ready",()=>resolve(true)));
+        await adapter.close();
     })
     
 })

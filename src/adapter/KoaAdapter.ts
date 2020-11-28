@@ -19,6 +19,9 @@ class KoaAdapter{
     getJigsaw(){
         return this.jigsaw;
     }
+    async close(){
+        await this.jigsaw.close();
+    }
     koa():koa.Middleware{
         let middleware = this.handle.bind(this);
         return compose([bodyparser({
