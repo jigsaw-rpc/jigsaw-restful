@@ -114,7 +114,7 @@ describe("Base Tests",function(){
     });
     it("KoaAdpater should be closable",async()=>{
         let adapter = new KoaAdapter();
-        await new Promise((resolve)=>adapter.getJigsaw().on("ready",()=>resolve(true)));
+        await new Promise((resolve)=>adapter.on("ready",()=>resolve(true)));
         await adapter.close();
     })
     

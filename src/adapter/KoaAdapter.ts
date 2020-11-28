@@ -1,5 +1,3 @@
-import {RPCSpi} from "jigsaw-rpc";
-
 import koa from "koa"
 import RequestFormatError from "../apierror/RequestFormatError";
 import APIError from "../apierror/APIError";
@@ -8,16 +6,38 @@ import PostHandler from "../PostHandler";
 import compose from "koa-compose";
 import bodyparser from "koa-bodyparser";
 import {userAgent} from "koa-useragent";
-import {RPC} from "jigsaw-rpc";
+import {RPC,RPCSpi} from "jigsaw-rpc";
+import { TypedEmitter } from "tiny-typed-emitter";
 
-class KoaAdapter{
+interface Event {
+    ready:()=>void;
+    closed:()=>void;
+}
+class KoaAdapter extends TypedEmitter<Event>{
     private jigsaw:RPCSpi.jigsaw.IJigsaw;
-    constructor(){
-        this.jigsaw = RPC.GetJigsaw();
+    constructor(jgoption?:RPCSpi.jigsaw.option.JigsawOption){
+        super();
+
+        this.jigsaw = RPC.GetJigsaw(jgoption);
         this.jigsaw.post(PostHandler);
+        this.jigsaw.on("ready",()=>{
+            this.emit("ready");
+        });
+        this.jigsaw.on("closed",()=>{
+            this.emit("closed");
+        });
+        this.jigsaw.on("error",()=>{
+
+        });
     }
-    getJigsaw(){
-        return this.jigsaw;
+    pre(handler:RPCSpi.jigsaw.ware.PreWare){
+        return this.jigsaw.pre(handler)
+    }
+    post(handler:RPCSpi.jigsaw.ware.PostWare){
+        return this.jigsaw.post(handler)
+    }
+    use(handler:RPCSpi.jigsaw.ware.UseWare){
+        return this.jigsaw.use(handler)
     }
     async close(){
         await this.jigsaw.close();
@@ -81,6 +101,7 @@ class KoaAdapter{
         else
             ctx.body = JSON.stringify(body_obj,null,"\t");
 
+        
     }
 
 };
