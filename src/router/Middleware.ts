@@ -5,11 +5,15 @@ import VerbNotImplError from "../apierror/VerbNotImplError";
 import APINotFoundError from "../apierror/APINotFoundError";
 import RouterOption from "./RouterOption";
 import RequestFormatError from "../apierror/RequestFormatError";
+import WorkFlow from "./WorkFlow";
+
 import { RPCSpi } from "jigsaw-rpc";
 
 class Middleware{
     private routers : Array<Router> = [];
     private strict : boolean;
+    private workflow = new Map<string,WorkFlow<RPCSpi.jigsaw.context.UseContext>>();
+
     constructor(strict:boolean = true){
         this.strict = strict;
     }
@@ -64,9 +68,17 @@ class Middleware{
     private addRouter(verb:string,pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         let router = new Router(verb,pattern,option,handler);
         this.routers.push(router);
+
+        this.getWorkFlow(verb).pushWork(handler);
+    }
+    private getWorkFlow(verb:string){
+        if(!this.workflow.has(verb))
+            this.workflow.set(verb,new WorkFlow());
+        return this.workflow.get(verb) as WorkFlow<RPCSpi.jigsaw.context.UseContext>;
     }
     private async handle(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
-        
+        await next();
+
         assert(typeof(ctx.method)=="string","method must be specified");
 
         if(ctx.method == "<get>/")
@@ -86,7 +98,8 @@ class Middleware{
                 if(router.getVerb() == path.verb){
 
                     UrlEverMatched.set(path.url,true);
-                    await router.route(matched,ctx,next);
+                    
+                    await router.route(matched,ctx,this.getWorkFlow(path.verb));
                 }
                     
             }

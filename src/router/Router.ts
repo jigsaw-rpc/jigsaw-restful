@@ -6,6 +6,7 @@ import Validator from "validatorjs";
 import RequestFormatError from "../apierror/RequestFormatError";
 import { RPCSpi } from "jigsaw-rpc";
 import MatchInfo from "./MatchInfo";
+import WorkFlow from "./WorkFlow";
 
 class Router{
     private verb:string;
@@ -41,7 +42,7 @@ class Router{
             return false;
         }
     }
-    async route(matched:MatchInfo,ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
+    async route(matched:MatchInfo,ctx:RPCSpi.jigsaw.context.UseContext,workflow:WorkFlow<RPCSpi.jigsaw.context.UseContext>) : Promise<void>{
         ctx.url = matched.method;
         ctx.apiver = matched.ver;
         ctx.resid = matched.id;
@@ -51,7 +52,7 @@ class Router{
         if(validator.fails())
             throw new RequestFormatError(validator.errors.errors);
 
-        await this.handler(ctx,next);
+        await workflow.call(ctx);        
     }
 
 }
