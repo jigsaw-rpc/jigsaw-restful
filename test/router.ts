@@ -1,4 +1,5 @@
 import { Router,KoaAdapter } from "../src";
+import {RPC} from "jigsaw-rpc";
 
 describe("Base Tests",function(){
     it("should be routing correctly 1",(done)=>{
@@ -112,10 +113,5 @@ describe("Base Tests",function(){
         }
         
     });
-    it("KoaAdpater should be closable",async()=>{
-        let adapter = new KoaAdapter();
-        await new Promise((resolve)=>adapter.on("ready",()=>resolve(true)));
-        await adapter.close();
-    })
     
 })

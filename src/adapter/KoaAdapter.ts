@@ -6,41 +6,13 @@ import PostHandler from "../PostHandler";
 import compose from "koa-compose";
 import bodyparser from "koa-bodyparser";
 import {userAgent} from "koa-useragent";
-import {RPC,RPCSpi} from "jigsaw-rpc";
-import { TypedEmitter } from "tiny-typed-emitter";
+import {RPCSpi} from "jigsaw-rpc";
 
-interface Event {
-    ready:()=>void;
-    closed:()=>void;
-}
-class KoaAdapter extends TypedEmitter<Event>{
+class KoaAdapter{
     private jigsaw:RPCSpi.jigsaw.IJigsaw;
-    constructor(jgoption?:RPCSpi.jigsaw.option.JigsawOption){
-        super();
-
-        this.jigsaw = RPC.GetJigsaw(jgoption);
-        this.jigsaw.post(PostHandler);
-        this.jigsaw.on("ready",()=>{
-            this.emit("ready");
-        });
-        this.jigsaw.on("closed",()=>{
-            this.emit("closed");
-        });
-        this.jigsaw.on("error",()=>{
-
-        });
-    }
-    pre(handler:RPCSpi.jigsaw.ware.PreWare){
-        return this.jigsaw.pre(handler)
-    }
-    post(handler:RPCSpi.jigsaw.ware.PostWare){
-        return this.jigsaw.post(handler)
-    }
-    use(handler:RPCSpi.jigsaw.ware.UseWare){
-        return this.jigsaw.use(handler)
-    }
-    async close(){
-        await this.jigsaw.close();
+    constructor(jigsaw:RPCSpi.jigsaw.IJigsaw){
+        this.jigsaw = jigsaw;
+        this.jigsaw.post(PostHandler,"jigsaw-router.KoaAdapter");
     }
     koa():koa.Middleware{
         let middleware = this.handle.bind(this);
