@@ -69,12 +69,14 @@ class Middleware{
         let router = new Router(verb,pattern,option,handler);
         this.routers.push(router);
 
-        this.getWorkFlow(verb).pushWork(handler);
+        this.getWorkFlow(verb,pattern).pushWork(handler);
     }
-    private getWorkFlow(verb:string){
-        if(!this.workflow.has(verb))
-            this.workflow.set(verb,new WorkFlow());
-        return this.workflow.get(verb) as WorkFlow<RPCSpi.jigsaw.context.UseContext>;
+    private getWorkFlow(verb:string,pattern:string){
+        let key = `[${verb}][${pattern}]`;
+
+        if(!this.workflow.has(key))
+            this.workflow.set(key,new WorkFlow());
+        return this.workflow.get(key) as WorkFlow<RPCSpi.jigsaw.context.UseContext>;
     }
     private async handle(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
         await next();
@@ -99,7 +101,7 @@ class Middleware{
 
                     UrlEverMatched.set(path.url,true);
                     
-                    await router.route(matched,ctx,this.getWorkFlow(path.verb));
+                    await router.route(matched,ctx,this.getWorkFlow(path.verb,router.getPattern()));
                 }
                     
             }
