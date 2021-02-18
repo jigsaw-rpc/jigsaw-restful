@@ -47,7 +47,7 @@
     },
     "org": "wyattzhy",
     "expose_port": [
-      "9900"
+      "1900"
     ]
   },
   "dependencies": {

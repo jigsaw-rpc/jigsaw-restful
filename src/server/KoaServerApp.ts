@@ -7,7 +7,7 @@ export interface KoaAppConfig{
     registry : string;
 };
 export const DefaultKoaAppConfig : KoaAppConfig = {
-    bind_port : 9900,
+    bind_port : 1900,
     registry : "jigsaw://127.0.0.1/"
 }
 
