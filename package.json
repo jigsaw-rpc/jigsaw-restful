@@ -6,8 +6,9 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build": "tsc",
-    "prepare": "npm run build",
+    "compile": "tsc",
+    "build": "node ./scripts/build",
+    "prepare": "npm run compile",
     "test-cov": "nyc --reporter=lcov npm test",
     "dev": "nodemon --watch ./src/ --watch ./examples/ -e ts --exec \"ts-node ./examples/test-app.ts\" "
   },
@@ -45,9 +46,10 @@
   "dependencies": {
     "@types/koa": "^2.11.6",
     "@types/validatorjs": "^3.15.0",
+    "config-style-cli": "^0.0.2",
     "debug": "^4.2.0",
     "jigsaw-rpc": "^0.0.9-dev2",
-    "koa": "^2.13.0",
+    "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
     "koa-useragent": "^4.0.0",
