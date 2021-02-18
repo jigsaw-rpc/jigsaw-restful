@@ -1,4 +1,8 @@
-const { KoaServerApp, DefaultKoaAppConfig } = require("../dist");
-const CLI = require("config-style-cli");
 
-CLI([ KoaServerApp, DefaultKoaAppConfig ]);
+const CLI = require("config-style-cli");
+const { KoaServerApp, DefaultKoaAppConfig } = require("../lib/index");
+
+CLI([
+    KoaServerApp,
+    DefaultKoaAppConfig
+]);
