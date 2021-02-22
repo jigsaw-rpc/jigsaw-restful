@@ -9,6 +9,14 @@ import WorkFlow from "./WorkFlow";
 
 import { RPCSpi } from "jigsaw-rpc";
 
+function getProperty(obj:any,name:string,def:any = {}){
+    if(!obj[name])
+        obj[name] = def;
+    else
+        def = obj[name];
+    return def;
+}
+
 class Middleware{
     private routers : Array<Router> = [];
     private strict : boolean;
@@ -18,13 +26,6 @@ class Middleware{
         this.strict = strict;
     }
     public getAPIMap(){
-        const getPrototype = (obj:any,name:string,def:any = {})=>{
-            if(!obj[name])
-                obj[name] = def;
-            else
-                def = obj[name];
-            return def;
-        }
         
         let apimap : any = {};
         for(let router of this.routers){
@@ -35,17 +36,19 @@ class Middleware{
             let resurl = router.getPattern();
             let verb = router.getVerb();
 
-            let mapobj :any = getPrototype(apimap,resurl);            
-            getPrototype(mapobj,"desc",option.desc || "");
-            getPrototype(mapobj,"return",option.return || "any");
+            let mapobj :any = getProperty(apimap,resurl);            
+            getProperty(mapobj,"return",option.return || "any");
             
-            let verbs = getPrototype(mapobj,"method",{});
+            let verbs = getProperty(mapobj,"method",{});
             
-            let paramobj :any = getPrototype(verbs,verb);
+            let paramobj :any = getProperty(verbs,verb);
 
-                
             for(let i in option.vali)
-                getPrototype(paramobj,i,option.vali[i]);            
+                getProperty(paramobj,i,option.vali[i]);            
+
+            let descs = getProperty(mapobj,"desc",{});
+            getProperty(descs,verb,option.desc);
+                
         };
 
         return apimap;
