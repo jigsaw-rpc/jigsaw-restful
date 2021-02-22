@@ -37,6 +37,10 @@ class Middleware{
             let verb = router.getVerb();
 
             let mapobj :any = getProperty(apimap,resurl);            
+
+            let descs = getProperty(mapobj,"desc",{});
+            getProperty(descs,verb,option.desc);
+
             getProperty(mapobj,"return",option.return || "any");
             
             let verbs = getProperty(mapobj,"method",{});
@@ -46,8 +50,6 @@ class Middleware{
             for(let i in option.vali)
                 getProperty(paramobj,i,option.vali[i]);            
 
-            let descs = getProperty(mapobj,"desc",{});
-            getProperty(descs,verb,option.desc);
                 
         };
 
