@@ -64,16 +64,17 @@ class Middleware{
         return this.handleSecretAPIMap.bind(this);
     }
     public get(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
-        return this.addRouter("get",pattern,option,handler);
-    }
-    public post(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
-        return this.addRouter("post",pattern,option,handler);
+        this.addRouter("get",pattern,option,handler);
+        this.addRouter("post",pattern,option,handler);
     }
     public put(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
-        return this.addRouter("put",pattern,option,handler);
+        this.addRouter("put",pattern,option,handler);
     }
     public delete(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
-        return this.addRouter("delete",pattern,option,handler);
+        this.addRouter("delete",pattern,option,handler);
+    }
+    public patch(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+        this.addRouter("patch",pattern,option,handler);
     }
     private addRouter(verb:string,pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         let router = new Router(verb,pattern,option,handler);
