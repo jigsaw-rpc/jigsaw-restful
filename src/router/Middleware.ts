@@ -21,8 +21,10 @@ class Middleware{
     private routers : Array<Router> = [];
     private strict : boolean;
     private workflow = new Map<string,WorkFlow<RPCSpi.jigsaw.context.UseContext>>();
+    private secret : string = "";
 
-    constructor(strict:boolean = true){
+    constructor(secret:string = "",strict:boolean = true){
+        this.secret = secret;
         this.strict = strict;
     }
     public getAPIMap(){
@@ -58,6 +60,9 @@ class Middleware{
     public router(){
         return this.handle.bind(this);
     }
+    public secretAPIMap(){
+        return this.handleSecretAPIMap.bind(this);
+    }
     public get(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
         return this.addRouter("get",pattern,option,handler);
     }
@@ -83,13 +88,16 @@ class Middleware{
             this.workflow.set(key,new WorkFlow());
         return this.workflow.get(key) as WorkFlow<RPCSpi.jigsaw.context.UseContext>;
     }
+    private async handleSecretAPIMap(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction){
+        if(ctx.method == `<get>/apimap/${this.secret}`)
+            throw new RequestFormatError(this.getAPIMap());
+        
+        await next();
+    }
     private async handle(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
         await next();
 
         assert(typeof(ctx.method)=="string","method must be specified");
-
-        if(ctx.method == "<get>/")
-            throw new RequestFormatError(this.getAPIMap());
 
 
         let UrlEverMatched = new Map<string,boolean>();
