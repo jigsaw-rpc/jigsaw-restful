@@ -31,6 +31,7 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-cors": "^0.0.0",
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.14.25",
     "cz-conventional-changelog": "^3.3.0",
@@ -59,6 +60,7 @@
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
+    "koa-cors": "^0.0.16",
     "koa-useragent": "^4.0.0",
     "meow": "^9.0.0",
     "route-parser": "0.0.5",

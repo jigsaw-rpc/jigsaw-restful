@@ -1,6 +1,7 @@
 import { RPC, RPCSpi } from "jigsaw-rpc";
 import Koa from "koa";
 import KoaAdapter from "./KoaAdapter";
+import KoaCors from "koa-cors";
 
 export interface KoaAppConfig{
     bind_port : number,
@@ -24,6 +25,8 @@ export class KoaServerApp{
         this.adapter = new KoaAdapter(this.jigsaw);
 
         this.koa = new Koa();
+
+        this.koa.use(KoaCors());
         this.koa.use(this.adapter.koa());
         this.koa.listen(this.config.bind_port);
     }
