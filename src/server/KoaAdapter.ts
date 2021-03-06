@@ -6,11 +6,11 @@ import PostHandler from "../PostHandler";
 import compose from "koa-compose";
 import bodyparser from "koa-bodyparser";
 import {userAgent} from "koa-useragent";
-import {RPCSpi} from "jigsaw-rpc";
+import { RPC } from "jigsaw-rpc";
 
 class KoaAdapter{
-    private jigsaw:RPCSpi.jigsaw.IJigsaw;
-    constructor(jigsaw:RPCSpi.jigsaw.IJigsaw){
+    private jigsaw:RPC.IJigsaw;
+    constructor(jigsaw:RPC.IJigsaw){
         this.jigsaw = jigsaw;
         this.jigsaw.post(PostHandler,"jigsaw-router.KoaAdapter");
     }

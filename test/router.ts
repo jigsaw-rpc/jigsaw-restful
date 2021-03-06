@@ -11,18 +11,7 @@ describe("Base Tests",function(){
             return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
-            if(count==0)
-               if(++count==4)done();
-            await next();
-        });
-        router.post("/v1/test/res",{
-            public:true,
-            desc:"",
-            return:"",
-            vali:{}
-        },async (ctx:any,next:any)=>{
-            if(count==1)
-                if(++count==4)done();
+               if(++count==3)done();
             await next();
         });
         router.delete("/v1/test/res",{
@@ -31,8 +20,7 @@ describe("Base Tests",function(){
             return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
-            if(count==2)
-            if(++count==4)done();
+            if(++count==3)done();
             await next();
         });
         router.put("/v1/test/res",{
@@ -41,17 +29,11 @@ describe("Base Tests",function(){
             return:"",
             vali:{}
         },async (ctx:any,next:any)=>{
-            if(count==3)
-            if(++count==4)done();
+            if(++count==3)done();
             await next();
         });
         router.router()({
             method:"<get>/v1/test/res"
-        } as any,async()=>{
-
-        });
-        router.router()({
-            method:"<post>/v1/test/res"
         } as any,async()=>{
 
         });

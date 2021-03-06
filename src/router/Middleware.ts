@@ -7,7 +7,7 @@ import RouterOption from "./RouterOption";
 import RequestFormatError from "../apierror/RequestFormatError";
 import WorkFlow from "./WorkFlow";
 
-import { RPCSpi } from "jigsaw-rpc";
+import { RPC } from "jigsaw-rpc";
 
 function getProperty(obj:any,name:string,def:any = {}){
     if(!obj[name])
@@ -20,7 +20,7 @@ function getProperty(obj:any,name:string,def:any = {}){
 class Middleware{
     private routers : Array<Router> = [];
     private strict : boolean;
-    private workflow = new Map<string,WorkFlow<RPCSpi.jigsaw.context.UseContext>>();
+    private workflow = new Map<string,WorkFlow<RPC.UseContext>>();
     private secret : string = "";
 
     constructor(secret:string = "",strict:boolean = true){
@@ -63,20 +63,20 @@ class Middleware{
     public secretAPIMap(){
         return this.handleSecretAPIMap.bind(this);
     }
-    public get(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+    public get(pattern:string,option:RouterOption,handler:RPC.UseWare){
         this.addRouter("get",pattern,option,handler);
         this.addRouter("post",pattern,option,handler);
     }
-    public put(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+    public put(pattern:string,option:RouterOption,handler:RPC.UseWare){
         this.addRouter("put",pattern,option,handler);
     }
-    public delete(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+    public delete(pattern:string,option:RouterOption,handler:RPC.UseWare){
         this.addRouter("delete",pattern,option,handler);
     }
-    public patch(pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+    public patch(pattern:string,option:RouterOption,handler:RPC.UseWare){
         this.addRouter("patch",pattern,option,handler);
     }
-    private addRouter(verb:string,pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+    private addRouter(verb:string,pattern:string,option:RouterOption,handler:RPC.UseWare){
         let router = new Router(verb,pattern,option,handler);
         this.routers.push(router);
 
@@ -87,15 +87,15 @@ class Middleware{
 
         if(!this.workflow.has(key))
             this.workflow.set(key,new WorkFlow());
-        return this.workflow.get(key) as WorkFlow<RPCSpi.jigsaw.context.UseContext>;
+        return this.workflow.get(key) as WorkFlow<RPC.UseContext>;
     }
-    private async handleSecretAPIMap(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction){
+    private async handleSecretAPIMap(ctx:RPC.UseContext,next:RPC.NextFunction){
         if(ctx.method == `<get>/apimap/${this.secret}`)
             throw new RequestFormatError(this.getAPIMap());
         
         await next();
     }
-    private async handle(ctx:RPCSpi.jigsaw.context.UseContext,next:RPCSpi.jigsaw.ware.NextFunction) : Promise<void>{
+    private async handle(ctx:RPC.UseContext,next:RPC.NextFunction) : Promise<void>{
         await next();
 
         assert(typeof(ctx.method)=="string","method must be specified");

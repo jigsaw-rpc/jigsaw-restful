@@ -4,7 +4,7 @@ import Path from "./Path";
 import RouterOption from "./RouterOption";
 import Validator from "validatorjs";
 import RequestFormatError from "../apierror/RequestFormatError";
-import { RPCSpi } from "jigsaw-rpc";
+import { RPC } from "jigsaw-rpc";
 import MatchInfo from "./MatchInfo";
 import WorkFlow from "./WorkFlow";
 
@@ -12,10 +12,10 @@ class Router{
     private verb:string;
     private pattern:string;
     private parser : URLParser;
-    private handler : RPCSpi.jigsaw.ware.UseWare;
+    private handler : RPC.UseWare;
     private option : RouterOption;
 
-    constructor(verb:string,pattern:string,option:RouterOption,handler:RPCSpi.jigsaw.ware.UseWare){
+    constructor(verb:string,pattern:string,option:RouterOption,handler:RPC.UseWare){
         this.verb = verb;
         this.pattern = pattern;
         this.handler = handler;
@@ -42,7 +42,7 @@ class Router{
             return false;
         }
     }
-    async route(matched:MatchInfo,ctx:RPCSpi.jigsaw.context.UseContext,workflow:WorkFlow<RPCSpi.jigsaw.context.UseContext>) : Promise<void>{
+    async route(matched:MatchInfo,ctx:RPC.UseContext,workflow:WorkFlow<RPC.UseContext>) : Promise<void>{
         ctx.url = matched.method;
         ctx.apiver = matched.ver;
         ctx.resid = matched.id;

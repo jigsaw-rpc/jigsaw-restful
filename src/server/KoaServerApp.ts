@@ -1,4 +1,4 @@
-import { RPC, RPCSpi } from "jigsaw-rpc";
+import { RPC } from "jigsaw-rpc";
 import Koa from "koa";
 import KoaAdapter from "./KoaAdapter";
 import KoaCors from "koa-cors";
@@ -15,7 +15,7 @@ export const DefaultKoaAppConfig : KoaAppConfig = {
 export class KoaServerApp{
     private koa? : Koa;
     private adapter? : KoaAdapter;
-    private jigsaw? : RPCSpi.jigsaw.IJigsaw;
+    private jigsaw? : RPC.IJigsaw;
     private config : KoaAppConfig;
     constructor(config : KoaAppConfig){
         this.config = config;

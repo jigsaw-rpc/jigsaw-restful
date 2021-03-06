@@ -1,8 +1,8 @@
 import assert from "assert";
-import {RPCSpi} from "jigsaw-rpc"
+import {RPC} from "jigsaw-rpc"
 import InternalError from "./InternalError";
 
-class APIError extends RPCSpi.error.JGError{
+class APIError extends RPC.error.JGError{
     private apicode : number;
     private httpcode: number;
     private detail : any;
@@ -47,7 +47,7 @@ class APIError extends RPCSpi.error.JGError{
     static fromError(err:Error){
         return new APIError(9001,err.message,500);
     }
-    static fromJGError(err:RPCSpi.error.JGError){    
+    static fromJGError(err:RPC.error.JGError){    
         return APIError.parse(err.parsing_str || "{}");
     }
 }
