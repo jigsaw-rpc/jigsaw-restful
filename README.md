@@ -29,7 +29,7 @@ router.get("/v1/test/res",{
     await next();
 });
 
-let jg = RPC.GetJigsaw({name:"testjigsaw"});
+const jg = RPC.GetJigsaw({name:"testjigsaw"});
 jg.use(router.router());
 
 ```
@@ -40,7 +40,7 @@ app.js
 ```js
 const { RPC } = require("jigsaw-rpc");
 
-let invoker = RPC.GetJigsaw();
+const invoker = RPC.GetJigsaw();
 
 invoker.send("test:<get>/v1/test/res",{
     str:"world!"
@@ -54,9 +54,9 @@ invoker.send("test:<get>/v1/test/res",{
 endpoint.js
 ```js
 const { RPC } = require("jigsaw-rpc");
-let adapter = new Restful.KoaAdapter(RPC.GetJigsaw());
+const adapter = new Restful.KoaAdapter(RPC.GetJigsaw());
 
-let koa = new Koa();
+const koa = new Koa();
 koa.use(adapter.koa());
 koa.listen(80);
 
@@ -145,7 +145,7 @@ router.get("/v1/test/res",{
     await next();
 });
 
-let jg = RPC.GetJigsaw({name:"testjigsaw"});
+const jg = RPC.GetJigsaw({name:"testjigsaw"});
 jg.use(router.secretAPIMap());
 jg.use(router.router());
 ```
