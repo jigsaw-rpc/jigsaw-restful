@@ -39,7 +39,6 @@ then try this:
 app.js
 ```js
 const { RPC } = require("jigsaw-rpc");
-const Restful = require("jigsaw-restful");
 
 let invoker = RPC.GetJigsaw();
 
@@ -54,8 +53,8 @@ invoker.send("test:<get>/v1/test/res",{
 
 endpoint.js
 ```js
-
-let adapter = new Restful.KoaAdapter();
+const { RPC } = require("jigsaw-rpc");
+let adapter = new Restful.KoaAdapter(RPC.GetJigsaw());
 
 let koa = new Koa();
 koa.use(adapter.koa());
@@ -114,8 +113,11 @@ will get a HTTP 400 Bad Request like this:
 some HTTP-Client like ``axios`` don't support GET request with a body, so in Jigsaw-Restful design, 
 
 GET method is same as POST method to get a information of resource.
+
 PUT method is used to create a resource ,
+
 PATCH method is used to modify a resource ,
+
 and DELETE method is used to delete a resource.
 
 # API Map
