@@ -1,6 +1,6 @@
 # Jigsaw-Restful
 
-jigsaw-restful is an API framework written in TypeScript, it design stable APIs for Jigsaws.
+jigsaw-restful is an API framework written in TypeScript, it can be used to design stable HTTP APIs through Jigsaws.
 
 ## Install
 
