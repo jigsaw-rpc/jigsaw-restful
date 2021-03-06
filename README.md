@@ -85,6 +85,30 @@ You will get the HTTP Response:
 }
 ```
 
+if you don't follow the rules of validation like:
+```
+GET http://127.0.0.1/v1/test/res?path=testjigsaw
+body: {}
+```
+
+will get a HTTP 400 Bad Request like this:
+
+```json
+{
+	"error": true,
+	"code": 9005,
+	"httpcode": 400,
+	"message": "Your request format isn't correct.",
+	"detail": {
+		"str": [
+			"The str field is required."
+		]
+	},
+	"type": "object",
+	"data": null
+}
+```
+
 # GET = POST
 
 some HTTP-Client like ``axios`` don't support GET request with a body, so in Jigsaw-Restful design, 
