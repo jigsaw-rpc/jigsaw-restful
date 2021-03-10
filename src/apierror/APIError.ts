@@ -36,7 +36,7 @@ class APIError extends RPC.error.JGError{
         return new APIError("REST_9001",err.message,500);
     }
     static fromJGError(err:RPC.error.JGError){
-        return new APIError(err.code,err.message,500,err.desc);
+        return new APIError(err.code,err.message,500,err.message);
     }
 }
 
