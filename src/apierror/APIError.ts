@@ -1,4 +1,5 @@
 import {RPC} from "jigsaw-rpc"
+import {serializeError} from "serialize-error";
 
 class APIError extends RPC.error.JGError{
     public code : string;
@@ -23,7 +24,7 @@ class APIError extends RPC.error.JGError{
     getCode(){
         return this.code;
     }
-    parse(err_json:string) : APIError{
+    static parse(err_json:string) : APIError{
         const err_obj = JSON.parse(err_json);
         let err : any = new APIError(err_obj.code,err_obj.message,err_obj.httpcode,err_obj.detail);
 
@@ -32,11 +33,16 @@ class APIError extends RPC.error.JGError{
         }
         return err;
     }
-    static fromError(err:Error){
-        return new APIError("REST_9001",err.message,500);
-    }
-    static fromJGError(err:RPC.error.JGError){
-        return new APIError(err.code,err.message,500,err.message);
+    static fromError(err:Error) : APIError{
+        const err_obj = serializeError(err);
+
+        let apierr = APIError.parse(JSON.stringify(err_obj));
+        if(!err_obj.code){
+            apierr.code = "REST_9001";
+            apierr.httpcode = 500;
+        }
+        return apierr;
+        
     }
 }
 
