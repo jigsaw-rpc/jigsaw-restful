@@ -1,14 +1,15 @@
 import APIError from "./APIError";
 
 class InternalError extends APIError{
-    private err : Error;
+    public detail : string;
     constructor(err:Error){
-        super(9001,"Internal Error Occured", 500);
+        super("REST_9001","Internal Error Occured", 500);
         this.name = "InternalError";
-        this.err = err;
+        this.detail = err.stack || err.message;
+
     }
     getDetailMessage(){
-        return this.err.stack || this.err.message;
+        return this.detail;
     }
 }
 

@@ -1,14 +1,16 @@
 import APIError from "../apierror/APIError";
 
 class HTTPResponse{
-    private code:number;
+    private code:string;
     private httpcode:number;
     private message:string;
     private detail:string;
     private data:any;
     private type:string;
+    private hasError:boolean;
 
-    constructor(code:number,httpcode:number,message:string,detail:string="",data:any = null){
+    constructor(hasError:boolean,code:string,httpcode:number,message:string,detail:string="",data:any = null){
+        this.hasError = hasError;
         this.code = code;
         this.httpcode = httpcode;
         this.message = message;
@@ -18,7 +20,7 @@ class HTTPResponse{
     }
     toObject(){
         return {
-            error:this.code != 0,
+            error:this.hasError,
             code:this.code,
             httpcode:this.httpcode,
             message:this.message,
@@ -28,10 +30,10 @@ class HTTPResponse{
         }
     }
     static createSuccess(data:any){
-        return new HTTPResponse(0,200,"API invoked successfully","",data);
+        return new HTTPResponse(true,"REST_SUCCESS",200,"API invoked successfully","",data);
     }
     static createFailed(err:APIError){
-        return new HTTPResponse(err.getCode(),err.getHttpStatusCode(),err.message,err.getDetailMessage(),null);
+        return new HTTPResponse(false,err.code,err.httpcode,err.message,err.getDetailMessage(),null);
     }
 
 };

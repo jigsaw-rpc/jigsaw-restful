@@ -1,17 +1,15 @@
-import assert from "assert";
 import {RPC} from "jigsaw-rpc"
-import InternalError from "./InternalError";
 
 class APIError extends RPC.error.JGError{
-    private apicode : number;
-    private httpcode: number;
-    private detail : any;
+    public code : string;
+    public httpcode: number;
+    public detail : any;
 
-    constructor(code:number,message:string,httpcode : number = 500,detail:any=""){
-        super(-1,"");
+    constructor(code:string,message:string,httpcode : number = 500,detail:any=""){
+        super(code,"");
 
         this.name = "APIError";
-        this.apicode = code;
+        this.code = code;
         this.httpcode = httpcode;
         this.message = message;
         this.detail = detail;
@@ -23,32 +21,22 @@ class APIError extends RPC.error.JGError{
         return this.httpcode;
     }
     getCode(){
-        return this.apicode;
+        return this.code;
     }
-    stringify(){
-        let obj={
-            name:"APIError",
-            code:-1,
-            desc:"",
-            detail:this.detail,
-            apicode:this.apicode,
-            httpcode:this.httpcode,
-            message:this.message,
-            parsing_str:""
-        }
-        obj.parsing_str = JSON.stringify(obj);
-        return JSON.stringify(obj);
-    }
-    static parse(str:string){
-        let obj=JSON.parse(str);
+    parse(err_json:string) : APIError{
+        const err_obj = JSON.parse(err_json);
+        let err : any = new APIError(err_obj.code,err_obj.message,err_obj.httpcode,err_obj.detail);
 
-        return new APIError(obj.apicode,obj.message,obj.httpcode,obj.detail);
+        for(let key in err_obj){
+            err[key] = err_obj[key];
+        }
+        return err;
     }
     static fromError(err:Error){
-        return new APIError(9001,err.message,500);
+        return new APIError("REST_9001",err.message,500);
     }
-    static fromJGError(err:RPC.error.JGError){    
-        return APIError.parse(err.parsing_str || "{}");
+    static fromJGError(err:RPC.error.JGError){
+        return new APIError(err.code,err.message,500,err.desc);
     }
 }
 
