@@ -62,11 +62,7 @@ class KoaAdapter{
 
         ctx.type = "application/json";
 
-        if(ctx.userAgent.isBot)
-            ctx.body = JSON.stringify(body_obj);
-        else
-            ctx.body = JSON.stringify(body_obj,null,"\t");
-
+        ctx.body = JSON.stringify(body_obj);
         
     }
 
