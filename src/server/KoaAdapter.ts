@@ -53,8 +53,11 @@ class KoaAdapter{
             let data = await this.jigsaw.send(req_path,invoke_data);
             body_obj = HTTPResponse.createSuccess(data).toObject();
             
-        }catch(err){
+            ctx.status = 200;
+        }catch(err){          
+
             body_obj = HTTPResponse.createFailed(APIError.fromError(err)).toObject();
+            ctx.status = err.httpcode;
         }
 
         ctx.type = "application/json";
