@@ -8,15 +8,7 @@ export default async function postHandler(ctx:RPC.PostContext,next:RPC.NextFunct
     }
 
     let err = ctx.result;
-    
-    if(err instanceof APIError){
-        let apierr = err as APIError;
-        ctx.result = apierr;
-    }else if(err.name=="APIError"){
-        let apierr = APIError.parse((err as RPC.error.JGError).stringify());
-        ctx.result = apierr;
-    }else
-        ctx.result = APIError.fromError(err);
+    ctx.result = APIError.fromError(err);
 
     await next();
 

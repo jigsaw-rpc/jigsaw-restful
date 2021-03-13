@@ -8,9 +8,11 @@ class HTTPResponse{
     private data:any;
     private type:string;
     private hasError:boolean;
+    private err_domain:string | null = null;
 
-    constructor(hasError:boolean,code:string,httpcode:number,message:string,detail:string="",data:any = null){
+    constructor(hasError:boolean,code:string,httpcode:number,message:string,err_domain:string | null = null,detail:string="",data:any = null){
         this.hasError = hasError;
+        this.err_domain = err_domain;
         this.code = code;
         this.httpcode = httpcode;
         this.message = message;
@@ -21,6 +23,7 @@ class HTTPResponse{
     toObject(){
         return {
             error:this.hasError,
+            err_domain:this.err_domain,
             code:this.code,
             httpcode:this.httpcode,
             message:this.message,
@@ -30,10 +33,10 @@ class HTTPResponse{
         }
     }
     static createSuccess(data:any){
-        return new HTTPResponse(true,"REST_SUCCESS",200,"API invoked successfully","",data);
+        return new HTTPResponse(false,"SUCCESS",200,"API invoked successfully",null,"",data);
     }
     static createFailed(err:APIError){
-        return new HTTPResponse(false,err.code,err.httpcode,err.message,err.getDetailMessage(),null);
+        return new HTTPResponse(true,err.code,err.httpcode,err.message,err.domain,err.detail,null);
     }
 
 };

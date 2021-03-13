@@ -1,31 +1,24 @@
-import {RPC} from "jigsaw-rpc"
 import {serializeError} from "serialize-error";
 
-class APIError extends RPC.error.JGError{
+class APIError extends Error{
     public code : string;
     public httpcode: number;
     public detail : any;
+    public domain : string;
+    public isAPIError : boolean = true;
 
-    constructor(code:string,message:string,httpcode : number = 500,detail:any=""){
-        super(code,"");
+    constructor(code:string,message:string,httpcode : number = 500,detail:any="",domain:string = "global"){
+        super(message);
 
         this.name = "APIError";
         this.code = code;
         this.httpcode = httpcode;
         this.message = message;
         this.detail = detail;
+        this.domain = domain;
+
     }
-    getDetailMessage(){
-        return this.detail;
-    }
-    getHttpStatusCode(){
-        return this.httpcode;
-    }
-    getCode(){
-        return this.code;
-    }
-    static parse(err_json:string) : APIError{
-        const err_obj = JSON.parse(err_json);
+    static parse(err_obj:any) : APIError{
         let err : any = new APIError(err_obj.code,err_obj.message,err_obj.httpcode,err_obj.detail);
 
         for(let key in err_obj){
@@ -35,14 +28,14 @@ class APIError extends RPC.error.JGError{
     }
     static fromError(err:Error) : APIError{
         const err_obj = serializeError(err);
-
-        let apierr = APIError.parse(JSON.stringify(err_obj));
-        if(!err_obj.code){
-            apierr.code = "REST_9001";
+        
+        let apierr = APIError.parse(err_obj);
+        if(!err_obj.isAPIError){
+            apierr.code = "SYSTEM_INTERNAL_ERROR";
             apierr.httpcode = 500;
+            apierr.domain = "REST";
         }
         return apierr;
-        
     }
 }
 

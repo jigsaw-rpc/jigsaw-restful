@@ -2,8 +2,8 @@ import APIError from "./APIError";
 
 class APINotFoundError extends APIError{
     constructor(){
-        super("REST_9002","This API can't be found", 404);
-        this.name = "APINotFoundError";
+        super("API_NOT_FOUND","This API can't be found", 404,"","REST");
+        this.name = "APINotFoundError";        
     }
 }
 
